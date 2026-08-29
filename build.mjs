@@ -3,18 +3,16 @@ import { cp, mkdir, rm } from "node:fs/promises";
 import { existsSync } from "node:fs";
 
 const args = process.argv.slice(2);
-const isProd = args.includes("--mode=prod");
 const watch = args.includes("--watch");
 const cleanOnly = args.includes("--clean-only");
-const outDir = isProd ? "release" : "dist";
+const outDir = "dist";
 
 const sharedOptions = {
   outdir: outDir,
   bundle: true,
   target: "chrome116",
   platform: "browser",
-  sourcemap: !isProd,
-  minify: isProd,
+  sourcemap: true,
   logLevel: "info",
 };
 
@@ -70,7 +68,7 @@ async function run() {
   }
 
   await Promise.all([build(esmBuildOptions), build(contentScriptBuildOptions)]);
-  console.log(`Build ${isProd ? "de producao" : "de desenvolvimento"} concluido em ./${outDir}`);
+  console.log(`Build concluido em ./${outDir}`);
 }
 
 run().catch((error) => {

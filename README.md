@@ -20,19 +20,14 @@ npm run build
 
 Depois, carregue a pasta `dist/` como extensão não empacotada em `chrome://extensions` (com o "Modo do desenvolvedor" ativado).
 
-Para gerar uma build de produção:
-
-```bash
-npm run build:release
-```
+Releases (builds de produção) são geradas pelo fluxo de gitflow do repositório, não por um script local.
 
 ## Scripts disponíveis
 
 | Script | Descrição |
 | --- | --- |
-| `npm run build` | Build de desenvolvimento |
-| `npm run watch` | Build de desenvolvimento em modo watch |
-| `npm run build:release` | Build de produção |
+| `npm run build` | Gera a build em `dist/` |
+| `npm run watch` | Build em modo watch |
 | `npm run typecheck` | Checagem de tipos com `tsc --noEmit` |
 | `npm run clean` | Limpa os artefatos de build |
 

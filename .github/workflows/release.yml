@@ -27,12 +27,12 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
-      - name: Build production release
-        run: npm run build:release
+      - name: Build
+        run: npm run build
 
       - name: Package release
         run: |
-          cd release
+          cd dist
           zip -r "../caxumba-video-saver-${{ github.ref_name }}.zip" .
           cd ..
 
