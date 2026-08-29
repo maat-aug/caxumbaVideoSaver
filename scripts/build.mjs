@@ -44,7 +44,7 @@ async function cleanOutDir() {
 }
 
 async function copyStaticFiles() {
-  await cp("manifest.json", `${outDir}/manifest.json`);
+  await cp("src/manifest.json", `${outDir}/manifest.json`);
   await cp("src/popup/popup.html", `${outDir}/popup.html`);
   await cp("src/offscreen/offscreen.html", `${outDir}/offscreen.html`);
   await cp("node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.js", `${outDir}/ffmpeg/ffmpeg-core.js`);

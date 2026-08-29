@@ -20,7 +20,7 @@ npm run build
 
 Depois, carregue a pasta `dist/` como extensão não empacotada em `chrome://extensions` (com o "Modo do desenvolvedor" ativado).
 
-Releases (builds de produção) são geradas pelo fluxo de gitflow do repositório, não por um script local.
+Ou baixe o arquivo pronto nas releases do github.
 
 ## Scripts disponíveis
 
