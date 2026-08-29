@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎬 Caxumba Video Saver
+# 🎬 CaxumbaVideoSaver
 
 <img src="img/caxumba.png" alt="Caxumba Video Saver" width="180" />
 
@@ -15,16 +15,14 @@
 
 ---
 
-Caxumba Video Saver é uma extensão de navegador (**Manifest V3**) que fareja vídeos **MP4**, **HLS** (`.m3u8`) e **DASH** servidos diretamente por uma página e permite baixá-los com poucos cliques. Tudo acontece localmente no seu navegador
-
-🔒 **nenhum dado passa por servidores de terceiros**.
+CaxumbaVideoSaver é uma extensão de navegador (**Manifest V3**) que fareja vídeos **MP4**, **HLS** (`.m3u8`) e **DASH** servidos diretamente por uma página e permite baixá-los com poucos cliques. Tudo acontece localmente no seu navegador
 
 ## ✨ Funcionalidades
 
 - **Detecção automática** de vídeos MP4, HLS e DASH carregados pela aba atual
 - **Popup intuitiva** com a lista de vídeos encontrados, badges por tipo (`MP4` / `HLS` / `DASH`) e seleção de qualidade
 - **Remuxagem no navegador** (via `ffmpeg.wasm`) para transformar streams HLS/DASH em um arquivo final pronto para baixar
-- **Download 100% local**, usando a API `downloads` do Chrome — sem intermediários
+- **Download 100% local**, usando a API `downloads` do Chrome
 
 ## 🚀 Instalação e build
 
@@ -61,11 +59,3 @@ src/
 ├── dash/                 # 🎞️  parsing e remux de manifests DASH
 └── media/ffmpeg.ts       # 🔧 integração com ffmpeg.wasm
 ```
-
----
-
-<div align="center">
-
-Feito com 🐹 e bastante café ☕
-
-</div>
