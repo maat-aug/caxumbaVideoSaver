@@ -1,3 +1,5 @@
+import { fetchAndParsePlaylist } from "../hls/playlist";
+import { downloadAndConcat } from "../media/ffmpeg";
 import type {
   DetectedVideo,
   DownloadEvent,
@@ -185,11 +187,36 @@ async function fetchThumbnailBlob(url: string): Promise<Blob> {
   return response.blob();
 }
 
+async function fetchHlsPreviewBlob(masterUrl: string): Promise<Blob> {
+  const master = await fetchAndParsePlaylist(masterUrl);
+  const variantUrl =
+    master.kind === "master" ? [...master.variants].sort((a, b) => a.bandwidth - b.bandwidth)[0]?.id : masterUrl;
+  if (!variantUrl) throw new Error("Nenhuma qualidade disponivel para gerar previa.");
+
+  const variant = await fetchAndParsePlaylist(variantUrl);
+  if (variant.kind !== "variant" || variant.encrypted || !variant.initSegmentUrl) {
+    throw new Error("Playlist HLS sem segmentos fMP4 compativeis com previa.");
+  }
+
+  const firstSegment = variant.segments[0];
+  if (!firstSegment) throw new Error("Nenhum segmento disponivel para gerar previa.");
+
+  const bytes = await downloadAndConcat([
+    { url: variant.initSegmentUrl, range: variant.initSegmentRange },
+    { url: firstSegment.url, range: firstSegment.range },
+  ]);
+  return new Blob([new Uint8Array(bytes)], { type: "video/mp4" });
+}
+
+function fetchPreviewBlob(video: DetectedVideo): Promise<Blob> {
+  return video.kind === "hls" ? fetchHlsPreviewBlob(video.url) : fetchThumbnailBlob(video.url);
+}
+
 function createThumbnail(video: DetectedVideo): HTMLElement {
   const placeholder = createPlaceholderThumb();
-  if (video.kind !== "mp4") return placeholder;
+  if (video.kind === "dash") return placeholder;
 
-  fetchThumbnailBlob(video.url)
+  fetchPreviewBlob(video)
     .then((blob) => {
       const thumbVideo = document.createElement("video");
       thumbVideo.className = "thumb";

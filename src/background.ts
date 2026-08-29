@@ -191,7 +191,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  if (!changeInfo.url) return;
+  if (changeInfo.status !== "loading") return;
   clearVideosAndCachesForTab(tabId).catch((error: unknown) => {
     console.error("Falha ao limpar videos apos navegacao da aba:", tabId, error);
   });

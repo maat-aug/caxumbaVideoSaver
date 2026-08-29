@@ -14,10 +14,16 @@ function notifyVideoVisible(): void {
   lastNotifyAt = now;
 
   const message: ExtensionRequest = { type: "VIDEO_VISIBLE" };
-  chrome.runtime.sendMessage(message).catch((error: unknown) => {
-    if (isExtensionContextInvalidated(error)) return;
-    console.warn("Falha ao notificar atividade de video:", error);
-  });
+  try {
+    chrome.runtime.sendMessage(message).catch((error: unknown) => {
+      if (isExtensionContextInvalidated(error)) return;
+      console.warn("Falha ao notificar atividade de video:", error);
+    });
+  } catch (error) {
+    if (!isExtensionContextInvalidated(error)) {
+      console.warn("Falha ao notificar atividade de video:", error);
+    }
+  }
 }
 
 const intersectionObserver = new IntersectionObserver(
