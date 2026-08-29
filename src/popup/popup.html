@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Caxumba Video Saver</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --accent: #4f46e5;
+        --accent-hover: #4338ca;
+        --accent-fg: #ffffff;
+        --bg: #ffffff;
+        --fg: #18181b;
+        --muted: rgba(24, 24, 27, 0.6);
+        --card-bg: #f7f7f9;
+        --card-border: rgba(0, 0, 0, 0.08);
+        --control-bg: #ffffff;
+        --control-border: rgba(0, 0, 0, 0.15);
+        --success: #16a34a;
+        --danger: #dc2626;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1c1c1e;
+          --fg: #f2f2f3;
+          --muted: rgba(242, 242, 243, 0.6);
+          --card-bg: #26262a;
+          --card-border: rgba(255, 255, 255, 0.08);
+          --control-bg: #303034;
+          --control-border: rgba(255, 255, 255, 0.14);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        width: 360px;
+        max-height: 480px;
+        overflow-y: auto;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 13px;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 14px 8px;
+      }
+
+      header h1 {
+        font-size: 15px;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+
+      #status {
+        padding: 0 14px 10px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+
+      #video-list {
+        list-style: none;
+        margin: 0;
+        padding: 0 14px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .video-item {
+        display: flex;
+        gap: 10px;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 10px;
+        padding: 10px;
+        transition: border-color 0.15s ease;
+      }
+
+      .video-item:hover {
+        border-color: var(--accent);
+      }
+
+      .thumb {
+        flex-shrink: 0;
+        width: 64px;
+        height: 40px;
+        border-radius: 6px;
+        background: rgba(128, 128, 128, 0.18);
+        object-fit: cover;
+      }
+
+      .thumb-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: var(--muted);
+      }
+
+      .video-body {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .video-title {
+        font-weight: 600;
+        word-break: break-all;
+        margin-bottom: 8px;
+        line-height: 1.35;
+      }
+
+      .badge {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 1px 7px;
+        border-radius: 999px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        vertical-align: middle;
+      }
+
+      .badge-mp4 {
+        background: #2563eb;
+        color: white;
+      }
+
+      .badge-hls {
+        background: #7c3aed;
+        color: white;
+      }
+
+      .badge-dash {
+        background: #0891b2;
+        color: white;
+      }
+
+      .controls {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      select {
+        flex: 1;
+        min-width: 0;
+        font: inherit;
+        color: var(--fg);
+        background: var(--control-bg);
+        border: 1px solid var(--control-border);
+        border-radius: 6px;
+        padding: 5px 8px;
+      }
+
+      select:disabled {
+        opacity: 0.6;
+      }
+
+      button {
+        font: inherit;
+        cursor: pointer;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-weight: 600;
+        background: var(--accent);
+        color: var(--accent-fg);
+        transition:
+          background-color 0.15s ease,
+          transform 0.05s ease,
+          opacity 0.15s ease;
+      }
+
+      button:hover:not(:disabled) {
+        background: var(--accent-hover);
+      }
+
+      button:active:not(:disabled) {
+        transform: scale(0.96);
+      }
+
+      button:disabled {
+        cursor: default;
+        opacity: 0.45;
+      }
+
+      .btn-ghost {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid var(--control-border);
+        font-weight: 500;
+        font-size: 11px;
+        padding: 5px 10px;
+      }
+
+      .btn-ghost:hover:not(:disabled) {
+        background: rgba(128, 128, 128, 0.14);
+        color: var(--fg);
+      }
+
+      .progress {
+        margin-top: 8px;
+        font-size: 11px;
+        color: var(--muted);
+        min-height: 14px;
+      }
+
+      .progress-done {
+        color: var(--success);
+      }
+
+      .progress-error {
+        color: var(--danger);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Caxumba Video Saver</h1>
+        <button id="clear-button" class="btn-ghost" type="button" disabled>Limpar</button>
+      </header>
+      <div id="status">Procurando videos nesta aba...</div>
+      <ul id="video-list"></ul>
+    </div>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

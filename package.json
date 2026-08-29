@@ -1,0 +1,23 @@
+{
+  "name": "caxumba-video-saver",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Extensao de navegador que detecta e baixa videos MP4/HLS servidos diretamente por uma pagina.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "clean": "node build.mjs --mode=dev --clean-only",
+    "build": "node build.mjs --mode=dev",
+    "watch": "node build.mjs --mode=dev --watch",
+    "build:release": "node build.mjs --mode=prod"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.270",
+    "esbuild": "^0.23.1",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@ffmpeg/core": "^0.12.10",
+    "@ffmpeg/ffmpeg": "^0.12.10"
+  }
+}
